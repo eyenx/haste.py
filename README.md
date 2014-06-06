@@ -5,7 +5,7 @@ lpaste.net (haste) python upload script
 
 usage:
 
-  hpaste.py [options] [filepath]
+  `hpaste.py [options] [filepath]`
 
   options:
 
