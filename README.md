@@ -5,7 +5,7 @@ lpaste.net (haste) python upload script
 
 usage:
 
-  hpaste.py [options] [filepath or input]
+  hpaste.py [options] [filepath]
 
   options:
 
@@ -15,3 +15,4 @@ usage:
   -l, --language   language (standard: depends on filename ending)
   -s, --stdin      read from stdin
   -u, --url        change haste server url (standard: lpaste.net) 
+  -h, --help       this help

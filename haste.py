@@ -17,7 +17,7 @@ import urllib.parse
 def usage(message=""):
   print("""usage:
 
-  hpaste.py [options] [filepath or input]
+  hpaste.py [options] [filepath]
 
   options:
 
@@ -27,6 +27,7 @@ def usage(message=""):
   -l, --language   language (standard: depends on filename ending)
   -s, --stdin      read from stdin
   -u, --url        change haste server url (standard: lpaste.net)
+  -h, --help       this help
   """)
   print(message)
   sys.exit(1)
@@ -35,9 +36,9 @@ def usage(message=""):
 
 def parse_options():
   try:
-    options,arguments=getopt.getopt(sys.argv[1:],"pt:a:l:s",["private","title=","author=","language=","stdin"])
+    options,arguments=getopt.getopt(sys.argv[1:],"pht:a:l:s",["private","help","title=","author=","language=","stdin"])
     return(options,arguments)
-  except getopt.GetOptError as error:
+  except getopt.GetoptError as error:
     usage(str(error))
 
 # request class
@@ -70,6 +71,11 @@ class HasteRequest():
   def set_url(self,url):
     self._url=url
   # check if set
+  def is_data_set(self):
+    if self._data:
+      return(True)
+    else:
+      return(False)
   def is_title_set(self):
     if self._title:
       return(True)
@@ -102,6 +108,8 @@ if __name__ == "__main__":
   for o,a in options:
     if o in ["-p","--private"]:
       myHasteRequest.set_private(True)
+    if o in ["-h","--help"]:
+      usage()
     if o in ["-t","--title"]:
       myHasteRequest.set_title(a)
     if o in ["-a","--author"]:
@@ -115,12 +123,22 @@ if __name__ == "__main__":
     if o in ["-u","--url"]:
       myHasteRequest.set_url(a)
 
+  # if filepath is given
   if len(arguments):
+
     # to implement
     # if not myHasteRequest.is_language_set():
     #    set language from file ending
+
+    # check if file exists
+    if not os.path.exists(arguments[0]):
+      usage()
     if not myHasteRequest.is_title_set():
       myHasteRequest.set_title(os.path.basename(arguments[0]))
     myHasteRequest.set_data(open(arguments[0]).read())
+  else:
+    if not myHasteRequest.is_data_set():
+      usage()
   myHasteRequest.request();
+  # print out pasteurl
   print(myHasteRequest.return_pasteurl())
